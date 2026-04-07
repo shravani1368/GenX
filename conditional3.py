@@ -3,6 +3,7 @@ def main():
       alph = alph.lower()
       vowel = "aeiou"
       consonant = "bcdfghjklmnpqrstvwxyz"
+      
       if(alph in vowel): 
        print("It is a vowel")
       elif(alph in consonant):
