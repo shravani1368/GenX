@@ -1,0 +1,11 @@
+Student_ID,Name,Course,Attendance_Percent,Marks
+1,Ram,Python,80,75
+2,Sita,Python,85,82
+3,Rahul,ML,70,65
+4,Anita,ML,,70
+5,Ram,Python,80,75
+6,Karan,DL,90,88
+7,Priya,Python,75,78
+8,Rahul,ML,70,65
+9,Sneha,DL,88,85
+10,Amit,Python,80,85

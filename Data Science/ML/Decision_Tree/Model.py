@@ -1,0 +1,90 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn import tree
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
+from sklearn.feature_selection import SelectKBest,f_classif
+import joblib
+
+
+
+
+def data_cleaning(df):
+    
+    f_num = df.select_dtypes(include="number").columns
+    f_cat = df.select_dtypes(include="object").columns
+    
+    for col in f_num:
+        df[col] = df[col].fillna(df[col].mean())
+        
+    for col in f_cat:
+        df[col] = df[col].fillna(df[col].mode()[0])
+
+    df = df.drop_duplicates()
+    
+    return df
+def preprocessing(df,prediction_column):
+    X= df.drop(df[["Name","PassengerId"]],axis=1)
+    new_df = pd.get_dummies(df,dtype=int)
+   
+
+    # X and Y splitting
+    # X = [["PassengerId","Pclass","Name","Sex","Age","SibSp","Parch","Ticket","Fare","Cabin","Embarked"]]
+    # y = ["Survived"]
+    
+    X = new_df.drop(new_df[[prediction_column]],axis=1)
+    y = new_df[prediction_column]
+    
+   
+   
+    # Data splitting 
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    return X_train, X_test, y_train, y_test,new_df
+
+def train(X_train,y_train):
+    model = tree.DecisionTreeClassifier(max_depth=3)
+    model.fit(X_train,y_train)
+    return model
+
+def evalution(model,X_test,y_test):
+    Y_pred = model.predict(X_test)
+     
+    Error = confusion_matrix(y_test,Y_pred) 
+    print(Error)
+
+    score = accuracy_score(y_test,Y_pred)
+    print("score", score*100)
+    return Error,score
+
+def feature_selection(X_train,y_train):
+            
+    selector = SelectKBest(score_func=f_classif, k=5)
+    X_new = selector.fit_transform(X_train, y_train)
+    
+    return X_new
+
+
+def main():
+    df =  pd.read_csv("Titanic-dataset.csv")
+    s = data_cleaning(df)
+    X_train, X_test, y_train, y_test,new_df = preprocessing(s,"Survived")
+    model = train(X_train,y_train)
+    Error,score= evalution(model,X_test,y_test)
+    plt.figure(figsize=(12,8))
+    X_new = feature_selection(X_train,y_train)
+    tree.plot_tree(model)
+    plt.show()
+
+    joblib.dump(model,"model.pkl")
+    
+   
+
+
+
+    
+
+
+if __name__ == "__main__":
+    main()

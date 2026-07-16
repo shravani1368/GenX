@@ -1,0 +1,5 @@
+I am doing my genrative AI coures in that now we have started learning Machine learing 
+In python for machine learing we need a data for trianing machine learing model,
+machine learing algorithm requries clean formated data so today we used pandas library to load dataset from csv file but in that data some entries were missing we have to fill those empty spaces
+because machine learing algorithm accept those vacant sapces as 0 
+zero could faild the calculation and result poorly so we decied to use mean of that particular table to fill vacant spaces in the particular column 
